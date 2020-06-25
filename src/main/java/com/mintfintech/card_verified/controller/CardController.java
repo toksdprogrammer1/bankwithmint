@@ -1,5 +1,6 @@
 package com.mintfintech.card_verified.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mintfintech.card_verified.dto.Response;
 import com.mintfintech.card_verified.dto.StatsResponse;
 import com.mintfintech.card_verified.exception.BadGatewayException;
@@ -18,7 +19,7 @@ public class CardController {
     private CardService cardService;
 
     @GetMapping("/verify/{cardNo}")
-    public ResponseEntity<Response> verify(@PathVariable String cardNo) throws BadGatewayException, BadRequestException {
+    public ResponseEntity<Response> verify(@PathVariable String cardNo) throws BadGatewayException, BadRequestException, JsonProcessingException {
         return new ResponseEntity<Response>(cardService.verify(cardNo), HttpStatus.OK);
     }
 

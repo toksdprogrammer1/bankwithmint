@@ -1,0 +1,31 @@
+
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <files> 
+        <file>
+            <source>src/main/resources/application.properties</source>
+            <outputDirectory>config</outputDirectory>
+            <filtered>true</filtered>
+            <fileMode>0755</fileMode>
+        </file>
+        <file>
+            <source>target/${artifactId}-${version}.${packaging}</source>
+            <outputDirectory>/</outputDirectory>
+            <destName>${artifactId}.${packaging}</destName>
+        </file>
+    </files>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>
+    </fileSets>
+</assembly>

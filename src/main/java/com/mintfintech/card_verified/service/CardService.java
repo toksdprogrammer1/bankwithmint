@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mintfintech.card_verified.dto.CardResponse;
 import com.mintfintech.card_verified.dto.RemoteResponse;
 import com.mintfintech.card_verified.dto.Response;
+import com.mintfintech.card_verified.dto.StatsResponse;
 import com.mintfintech.card_verified.exception.BadGatewayException;
 import com.mintfintech.card_verified.exception.BadRequestException;
 import com.mintfintech.card_verified.exception.ResourceNotFoundException;
@@ -15,6 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +83,14 @@ public class CardService {
         return new Card(payload.get("scheme").asText(),
                 payload.get("type").asText(),
                 payload.get("bank").get("name").asText(), true);
+    }
+
+    public StatsResponse getStats(int start, int limit){
+        Pageable paging = PageRequest.of(start, limit);
+        Page<Card> cardPage = cardRepository.findAll(paging);
+        Map<String, Long> response = new HashMap<>();
+        cardPage.getContent().forEach(card -> response.put(card.getCardNo(), card.getHit()));
+        return new StatsResponse(true, response, start + 1, limit, cardPage.getTotalElements());
     }
 
 }
